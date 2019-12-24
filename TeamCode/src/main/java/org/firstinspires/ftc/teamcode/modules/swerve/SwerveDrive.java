@@ -460,12 +460,22 @@ public class SwerveDrive {
         module3.disablePID();
     }
 
+    @Deprecated
     public void movePID(double position, double power) {
         int encoder = SwerveModule.convertInchesToTicks(position);
         module0.movePID(encoder, power);
         module1.movePID(encoder, power);
         module2.movePID(encoder, power);
         module3.movePID(encoder, power);
+    }
+
+    private double pDrive = 0.1;
+    public double movePID(double yTarget) {
+        double yPos = swerveKinematics.getCenterOfMass().getY();
+        double error = Math.abs(yTarget-yPos);
+        double power = error * pDrive;
+        debugger.addData("PID power", power);
+        return power;
     }
 
     public void resetMotorDirections() {

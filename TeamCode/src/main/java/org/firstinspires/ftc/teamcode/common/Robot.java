@@ -138,22 +138,23 @@ public class Robot {
             // continue movement
             if (currentWaypoint.enablePID) {
                 if (path.DIRECTION == Direction.FORWARD || path.DIRECTION == Direction.REVERSE) {
-                    if (!pidOverride) {
+//                    if (!pidOverride) {
                         if (path.DIRECTION == Direction.FORWARD)
-                            swerveDrive.swivel(90);
+                            swerveDrive.fod(90,swerveDrive.movePID(path.SEGMENT_END.Y),swerveDrive.turnPID(90),swerveDrive.swerveKinematics.getYaw());
                         else
-                            swerveDrive.swivel(-90);
-                        try {
-                            Thread.sleep(100);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e.getMessage());
-                        }
-                        double distance = path.SEGMENT_END.Y - swerveDrive.swerveKinematics.getCenterOfMass().getY();
-                        swerveDrive.movePID(distance, currentWaypoint.POWER);
-                        swerveDrive.enablePID();
-                        pidOverride = true;
-                    }
+                            swerveDrive.fod(-90,swerveDrive.movePID(path.SEGMENT_END.Y),swerveDrive.turnPID(90),swerveDrive.swerveKinematics.getYaw());
+//                        try {
+//                            Thread.sleep(100);
+//                        } catch (Exception e) {
+//                            throw new RuntimeException(e.getMessage());
+//                        }
+//                        double distance = path.SEGMENT_END.Y - swerveDrive.swerveKinematics.getCenterOfMass().getY();
+//                        swerveDrive.movePID(distance, currentWaypoint.POWER);
+//                        swerveDrive.enablePID();
+//                        pidOverride = true;
+//                    }
                 }
+                telemetry.addLine("New PID");
                 path.pathFollowing(swerveDrive.swerveKinematics.getCenterOfMass());
             } else {
                 UniversalConstants.kS = currentWaypoint.kS;
